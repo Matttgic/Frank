@@ -157,14 +157,14 @@ def main():
                 "Date des matchs",
                 value=date.today()
             )
-            max_matches = st.slider("Nombre max de matchs", 5, 30, 15)
+            max_matches = st.slider("Nombre max de matchs", 5, 50, 20)  # Augmenté pour mobile
             
         elif mode == "Par ligue":
             selected_league = st.selectbox(
                 "Choisir une ligue",
                 list(POPULAR_LEAGUES.keys())
             )
-            max_matches = st.slider("Nombre max de matchs", 5, 20, 10)
+            max_matches = st.slider("Nombre max de matchs", 5, 30, 15)
         
         # Bouton de rafraîchissement
         if st.button("🔄 Actualiser", type="primary"):
@@ -176,7 +176,13 @@ def main():
         # Le compteur sera affiché automatiquement par l'API
         
         st.markdown("---")
-        st.markdown("**💡 Astuce:** Limitez le nombre de matchs pour économiser vos requêtes API")
+        st.markdown("**📱 Mode Mobile**")
+        st.markdown("• Les matchs sont en liste compacte")
+        st.markdown("• Cliquez pour voir les détails")
+        st.markdown("• Activez les prédictions si besoin")
+        
+        st.markdown("---")
+        st.markdown("**💡 Astuce:** Mode rapide sans prédictions pour économiser les requêtes API")
     
     # Zone principale
     if mode == "Matchs du jour":
