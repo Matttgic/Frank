@@ -199,7 +199,7 @@ def get_fixtures_cached(mode, date_or_league_id, max_matches):
         return api.get_live_fixtures()
     
 def display_daily_matches(api, selected_date, max_matches):
-    """Affiche les matchs du jour sélectionné"""
+    """Affiche les matchs du jour sélectionné en format mobile-friendly"""
     st.header(f"📅 Matchs du {selected_date.strftime('%d/%m/%Y')}")
     
     with st.spinner("Récupération des matchs..."):
@@ -211,23 +211,29 @@ def display_daily_matches(api, selected_date, max_matches):
     
     st.success(f"✅ {len(fixtures)} matchs trouvés")
     
-    # Sélection des matchs pour les prédictions
-    st.subheader("🎯 Prédictions")
+    # Mode complet avec prédictions
+    show_predictions = st.checkbox("🎯 Afficher les prédictions (utilise plus de requêtes API)", value=False)
     
-    # Limiter automatiquement selon les requêtes restantes
-    remaining_requests = 100 - api.request_count - 1  # -1 pour la requête fixtures
-    max_predictions = min(len(fixtures), remaining_requests, max_matches)
-    
-    st.info(f"Affichage des prédictions pour {max_predictions} matchs (économie des requêtes API)")
-    
-    # Récupération et affichage des prédictions
-    for i, fixture in enumerate(fixtures[:max_predictions]):
-        with st.expander(f"🆚 {fixture['teams']['home']['name']} vs {fixture['teams']['away']['name']}", expanded=True):
-            with st.spinner("Récupération des prédictions..."):
+    if show_predictions:
+        # Limiter automatiquement selon les requêtes restantes
+        remaining_requests = 100 - api.request_count - 1
+        max_predictions = min(len(fixtures), remaining_requests, 10)  # Max 10 pour économiser
+        
+        st.info(f"Affichage des prédictions pour {max_predictions} matchs (économie des requêtes API)")
+        
+        # Récupération et affichage des prédictions
+        for i, fixture in enumerate(fixtures[:max_predictions]):
+            with st.spinner(f"Récupération prédiction {i+1}/{max_predictions}..."):
                 prediction = api.get_predictions(fixture['fixture']['id'])
-                time.sleep(0.5)  # Petite pause pour éviter de surcharger l'API
+                time.sleep(0.3)  # Petite pause pour éviter de surcharger l'API
             
             UIComponents.display_match_card(fixture, prediction)
+    else:
+        # Mode compact sans prédictions (économise les requêtes API)
+        st.info("💡 Mode rapide - Cochez la case ci-dessus pour voir les prédictions")
+        
+        for fixture in fixtures:
+            UIComponents.display_match_card(fixture, None)
 
 def display_league_matches(api, league_id, league_name, max_matches):
     """Affiche les matchs d'une ligue"""
