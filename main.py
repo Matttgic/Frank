@@ -47,8 +47,23 @@ def main():
     st.title("⚽ Football Prédictions & Matchs")
     st.markdown("---")
     
+    # Vérification de la clé API
+    from config import API_KEY
+    if not API_KEY or API_KEY == "your_rapidapi_key_here":
+        st.error("🔑 Clé API manquante!")
+        st.markdown("""
+        Pour utiliser cette application, vous devez:
+        1. Obtenir une clé API RapidAPI pour l'API Football
+        2. Configurer la variable d'environnement RAPIDAPI_KEY
+        """)
+        st.stop()
+    
     # Initialisation de l'API
-    api = FootballAPI()
+    try:
+        api = FootballAPI()
+    except Exception as e:
+        st.error(f"Erreur d'initialisation de l'API: {e}")
+        st.stop()
     
     # Sidebar pour les options
     with st.sidebar:
