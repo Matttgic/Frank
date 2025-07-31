@@ -27,20 +27,69 @@ except Exception as e:
     # Fallback if page config fails
     pass
 
-# CSS personnalisé
+# CSS personnalisé pour mobile
 st.markdown("""
 <style>
+    /* Mobile optimizations */
     .main > div {
-        padding-top: 2rem;
+        padding-top: 1rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
     }
+    
+    /* Compact metrics */
     .stMetric {
         background-color: #f0f2f6;
         border: 1px solid #e1e5e9;
-        padding: 0.5rem;
+        padding: 0.3rem;
         border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
     }
-</style>
-""", unsafe_allow_html=True)
+    
+    /* Compact expander */
+    .streamlit-expanderHeader {
+        font-size: 0.9rem !important;
+        padding: 0.5rem !important;
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .main > div {
+            padding-left: 0.2rem;
+            padding-right: 0.2rem;
+        }
+        
+        /* Smaller images on mobile */
+        img {
+            max-width: 30px !important;
+            height: auto !important;
+        }
+        
+        /* Compact text */
+        .stMarkdown h1 {
+            font-size: 1.5rem !important;
+        }
+        
+        .stMarkdown h2 {
+            font-size: 1.2rem !important;
+        }
+        
+        .stMarkdown h3 {
+            font-size: 1rem !important;
+        }
+    }
+    
+    /* Liste compacte des matchs */
+    .streamlit-expanderContent {
+        padding: 0.5rem !important;
+    }
+    
+    /* Boutons plus compacts */
+    .stButton button {
+        padding: 0.3rem 0.6rem !important;
+        font-size: 0.8rem !important;
+    }
+</style>""", unsafe_allow_html=True)
 
 def main():
     # Titre principal
