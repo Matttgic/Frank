@@ -8,7 +8,7 @@ class UIComponents:
     
     @staticmethod
     def display_match_card(fixture, prediction):
-        """Affiche une carte de match compacte et mobile-friendly"""
+        """Affiche une carte de match compacte et mobile-friendly avec prédiction et conseil dans le titre"""
         fixture_data = DataProcessor.process_fixture_data(fixture)
         prediction_data = DataProcessor.process_prediction_data(prediction)
         
@@ -23,24 +23,23 @@ class UIComponents:
         else:
             score_time = DataProcessor.format_match_time(fixture_data['date'])
         
-        # Prédiction compacte
-        winner_prediction = ""
-        if prediction_data['winner'] != 'N/A':
-            if prediction_data['percent_home'] != '0%':
-                home_pct = prediction_data['percent_home']
-                away_pct = prediction_data['percent_away']
-                draw_pct = prediction_data['percent_draw']
-                winner_prediction = f"🎯 {prediction_data['winner']} ({home_pct} | {draw_pct} | {away_pct})"
-            else:
-                winner_prediction = f"🎯 {prediction_data['winner']}"
+        # Prédiction et conseil directement dans le titre
+        prediction_info = ""
+        if prediction_data['winner'] != 'N/A' and prediction_data['advice'] != 'Aucun conseil disponible':
+            # Format: "🎯 Gagnant • Conseil"
+            prediction_info = f"🎯 {prediction_data['winner']} • {prediction_data['advice']}"
+        elif prediction_data['winner'] != 'N/A':
+            # Seulement le gagnant si pas de conseil
+            prediction_info = f"🎯 {prediction_data['winner']}"
         else:
-            winner_prediction = "⚠️ Pas de prédiction"
+            prediction_info = "⚠️ Pas de prédiction disponible"
         
-        # Titre compact pour l'expander
-        match_title = f"{status_emoji} {home_team} vs {away_team} • {score_time}"
+        # Titre compact pour l'expander avec toutes les infos essentielles
+        match_title = f"**{status_emoji} {home_team} vs {away_team} • {score_time}**"
+        prediction_line = f"{prediction_info}"
         
-        # Utiliser un expander fermé par défaut avec info compacte
-        with st.expander(f"**{match_title}**\n{winner_prediction}", expanded=False):
+        # Utiliser un expander fermé par défaut avec info complète
+        with st.expander(f"{match_title}\n{prediction_line}", expanded=False):
             # Contenu détaillé quand on clique
             col1, col2, col3 = st.columns([1, 1, 1])
             
@@ -65,17 +64,24 @@ class UIComponents:
             # Informations du match
             st.markdown(f"🏆 **{fixture_data['league']}** • 🏟️ {fixture_data['venue']}")
             
-            # Prédictions détaillées
+            # Prédictions détaillées avec pourcentages
             if prediction_data['winner'] != 'N/A':
                 col1, col2 = st.columns(2)
                 
                 with col1:
-                    st.markdown("### 🎯 Prédictions")
+                    st.markdown("### 🎯 Prédictions Détaillées")
                     st.markdown(f"**Gagnant prédit:** {prediction_data['winner']}")
                     st.markdown(f"**Buts:** {prediction_data['under_over']}")
                     
+                    # Afficher les pourcentages dans la vue détaillée
+                    if prediction_data['percent_home'] != '0%':
+                        st.markdown("**Probabilités:**")
+                        st.markdown(f"• {fixture_data['home_team']}: {prediction_data['percent_home']}")
+                        st.markdown(f"• Match nul: {prediction_data['percent_draw']}")
+                        st.markdown(f"• {fixture_data['away_team']}: {prediction_data['percent_away']}")
+                    
                 with col2:
-                    st.markdown("### 💡 Conseil")
+                    st.markdown("### 💡 Conseil Complet")
                     st.markdown(f"*{prediction_data['advice']}*")
                 
                 # Graphique des pourcentages seulement dans la vue détaillée
