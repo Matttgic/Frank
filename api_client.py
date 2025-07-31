@@ -18,7 +18,7 @@ class FootballAPI:
             
         try:
             url = f"{BASE_URL}{endpoint}"
-            response = requests.get(url, headers=HEADERS, timeout=10)
+            response = requests.get(url, headers=HEADERS, timeout=30)
             self.request_count += 1
             
             # Afficher le compteur dans la sidebar
@@ -26,15 +26,27 @@ class FootballAPI:
             
             if response.status_code == 200:
                 return response.json()
+            elif response.status_code == 429:
+                st.error("⚠️ Limite de taux API atteinte. Veuillez patienter.")
+                return None
+            elif response.status_code == 403:
+                st.error("🔑 Clé API invalide ou expirée.")
+                return None
             else:
-                st.error(f"Erreur API: {response.status_code}")
+                st.error(f"Erreur API: {response.status_code} - {response.text}")
                 return None
                 
         except requests.exceptions.Timeout:
             st.error("⏱️ Timeout - L'API met trop de temps à répondre")
             return None
+        except requests.exceptions.ConnectionError:
+            st.error("🌐 Erreur de connexion - Vérifiez votre connexion internet")
+            return None
         except requests.exceptions.RequestException as e:
-            st.error(f"Erreur de connexion: {str(e)}")
+            st.error(f"Erreur de requête: {str(e)}")
+            return None
+        except Exception as e:
+            st.error(f"Erreur inattendue: {str(e)}")
             return None
     
     def get_fixtures_by_date(self, date):
