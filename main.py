@@ -236,7 +236,7 @@ def display_daily_matches(api, selected_date, max_matches):
             UIComponents.display_match_card(fixture, None)
 
 def display_league_matches(api, league_id, league_name, max_matches):
-    """Affiche les matchs d'une ligue"""
+    """Affiche les matchs d'une ligue en format mobile-friendly"""
     st.header(f"🏆 {league_name}")
     
     with st.spinner("Récupération des matchs..."):
@@ -248,17 +248,27 @@ def display_league_matches(api, league_id, league_name, max_matches):
     
     st.success(f"✅ {len(fixtures)} matchs trouvés")
     
-    # Récupération et affichage des prédictions
-    remaining_requests = 100 - api.request_count - 1
-    max_predictions = min(len(fixtures), remaining_requests)
+    # Mode complet avec prédictions
+    show_predictions = st.checkbox("🎯 Afficher les prédictions (utilise plus de requêtes API)", value=False)
     
-    for fixture in fixtures[:max_predictions]:
-        with st.expander(f"🆚 {fixture['teams']['home']['name']} vs {fixture['teams']['away']['name']}", expanded=True):
+    if show_predictions:
+        remaining_requests = 100 - api.request_count - 1
+        max_predictions = min(len(fixtures), remaining_requests, 8)  # Max 8 pour les ligues
+        
+        st.info(f"Affichage des prédictions pour {max_predictions} matchs")
+        
+        for fixture in fixtures[:max_predictions]:
             with st.spinner("Récupération des prédictions..."):
                 prediction = api.get_predictions(fixture['fixture']['id'])
-                time.sleep(0.5)
+                time.sleep(0.3)
             
             UIComponents.display_match_card(fixture, prediction)
+    else:
+        # Mode compact sans prédictions
+        st.info("💡 Mode rapide - Cochez la case ci-dessus pour voir les prédictions")
+        
+        for fixture in fixtures:
+            UIComponents.display_match_card(fixture, None)
 
 def display_live_matches(api):
     """Affiche les matchs en direct"""
