@@ -32,12 +32,71 @@ HEADERS = {
 MAX_DAILY_REQUESTS = 100
 MAX_MATCHES_PER_DAY = 20  # Pour rester sous la limite
 
-# Ligues populaires avec leurs IDs
+# Ligues principales organisées par région
 POPULAR_LEAGUES = {
-    'Premier League': 39,
-    'La Liga': 140,
-    'Serie A': 135,
-    'Bundesliga': 78,
-    'Ligue 1': 61,
-    'Champions League': 2
+    # === EUROPEAN TOP LEAGUES (1st Division) ===
+    '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League': 39,
+    '🇪🇸 La Liga': 140,
+    '🇮🇹 Serie A': 135,
+    '🇩🇪 Bundesliga': 78, 
+    '🇫🇷 Ligue 1': 61,
+    '🇳🇱 Eredivisie': 88,
+    '🇵🇹 Primeira Liga': 94,
+    '🇧🇪 Pro League': 144,
+    '🇦🇹 Bundesliga': 218,
+    '🇨🇭 Super League': 207,
+    '🇹🇷 Süper Lig': 203,
+    '🇬🇷 Super League': 197,
+    '🇷🇺 Premier League': 235,
+    '🇺🇦 Premier League': 333,
+    '🇳🇴 Eliteserien': 103,
+    '🇸🇪 Allsvenskan': 113,
+    '🇩🇰 Superliga': 119,
+    
+    # === BIG 5 SECOND DIVISIONS ===
+    '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship': 40,
+    '🇪🇸 Segunda División': 141,
+    '🇮🇹 Serie B': 136,
+    '🇩🇪 2. Bundesliga': 79,
+    '🇫🇷 Ligue 2': 62,
+    
+    # === EUROPEAN COMPETITIONS ===
+    '🏆 Champions League': 2,
+    '🥈 Europa League': 3,
+    '🥉 Conference League': 848,
+    '🏆 Champions League Qualification': 531,
+    '🥈 Europa League Qualification': 679,
+    
+    # === SOUTH AMERICA ===
+    '🇧🇷 Brasileirão Serie A': 71,
+    '🇦🇷 Liga Profesional': 128,
+    '🇺🇾 Primera División': 218,
+    '🇨🇱 Primera División': 265,
+    '🇨🇴 Liga BetPlay': 239,
+    '🇵🇪 Liga 1': 281,
+    '🇪🇨 Serie A': 242,
+    '🏆 Copa Libertadores': 13,
+    '🥈 Copa Sudamericana': 11,
+    
+    # === NORTH & CENTRAL AMERICA ===
+    '🇺🇸 MLS': 253,
+    '🇲🇽 Liga MX': 262,
+    '🇨🇦 Canadian Premier League': 285,
+    
+    # === ASIA ===
+    '🇯🇵 J1 League': 98,
+    '🇰🇷 K League 1': 292,
+    '🇨🇳 Chinese Super League': 169,
+    '🇸🇦 Saudi Pro League': 307,
+    '🇦🇪 UAE Pro League': 301,
+    '🇶🇦 Stars League': 274,
+    '🇮🇷 Persian Gulf Pro League': 290,
+    
+    # === OCEANIA ===
+    '🇦🇺 A-League': 188,
+    
+    # === AFRICA (BONUS) ===
+    '🇿🇦 Premier Soccer League': 244,
+    '🇪🇬 Premier League': 233,
+    '🏆 CAF Champions League': 12,
 }
