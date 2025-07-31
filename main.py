@@ -8,12 +8,16 @@ from ui_components import UIComponents
 from config import POPULAR_LEAGUES
 
 # Configuration de la page
-st.set_page_config(
-    page_title="⚽ Football Prédictions",
-    page_icon="⚽",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+try:
+    st.set_page_config(
+        page_title="⚽ Football Prédictions",
+        page_icon="⚽",
+        layout="wide",
+        initial_sidebar_state="expanded"
+    )
+except Exception as e:
+    # Fallback if page config fails
+    pass
 
 # CSS personnalisé
 st.markdown("""
