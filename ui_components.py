@@ -8,22 +8,48 @@ class UIComponents:
     
     @staticmethod
     def display_match_card(fixture, prediction):
-        """Affiche une carte de match avec ses prédictions"""
+        """Affiche une carte de match compacte et mobile-friendly"""
         fixture_data = DataProcessor.process_fixture_data(fixture)
         prediction_data = DataProcessor.process_prediction_data(prediction)
         
-        # Container principal
-        with st.container():
-            # Header du match
+        # Format compact pour mobile
+        home_team = fixture_data['home_team']
+        away_team = fixture_data['away_team']
+        status_emoji = DataProcessor.get_status_emoji(fixture_data['status'])
+        
+        # Score ou heure
+        if fixture_data['score_home'] is not None:
+            score_time = f"{fixture_data['score_home']}-{fixture_data['score_away']}"
+        else:
+            score_time = DataProcessor.format_match_time(fixture_data['date'])
+        
+        # Prédiction compacte
+        winner_prediction = ""
+        if prediction_data['winner'] != 'N/A':
+            if prediction_data['percent_home'] != '0%':
+                home_pct = prediction_data['percent_home']
+                away_pct = prediction_data['percent_away']
+                draw_pct = prediction_data['percent_draw']
+                winner_prediction = f"🎯 {prediction_data['winner']} ({home_pct} | {draw_pct} | {away_pct})"
+            else:
+                winner_prediction = f"🎯 {prediction_data['winner']}"
+        else:
+            winner_prediction = "⚠️ Pas de prédiction"
+        
+        # Titre compact pour l'expander
+        match_title = f"{status_emoji} {home_team} vs {away_team} • {score_time}"
+        
+        # Utiliser un expander fermé par défaut avec info compacte
+        with st.expander(f"**{match_title}**\n{winner_prediction}", expanded=False):
+            # Contenu détaillé quand on clique
             col1, col2, col3 = st.columns([1, 1, 1])
             
             with col1:
-                st.markdown(f"**{fixture_data['home_team']}**")
+                st.markdown(f"**🏠 {fixture_data['home_team']}**")
                 if fixture_data['home_logo']:
-                    st.image(fixture_data['home_logo'], width=50)
+                    st.image(fixture_data['home_logo'], width=40)
             
             with col2:
-                status_emoji = DataProcessor.get_status_emoji(fixture_data['status'])
                 st.markdown(f"### {status_emoji}")
                 if fixture_data['score_home'] is not None:
                     st.markdown(f"**{fixture_data['score_home']} - {fixture_data['score_away']}**")
@@ -32,14 +58,14 @@ class UIComponents:
                     st.markdown(f"**{match_time}**")
             
             with col3:
-                st.markdown(f"**{fixture_data['away_team']}**")
+                st.markdown(f"**🚌 {fixture_data['away_team']}**")
                 if fixture_data['away_logo']:
-                    st.image(fixture_data['away_logo'], width=50)
+                    st.image(fixture_data['away_logo'], width=40)
             
             # Informations du match
             st.markdown(f"🏆 **{fixture_data['league']}** • 🏟️ {fixture_data['venue']}")
             
-            # Prédictions
+            # Prédictions détaillées
             if prediction_data['winner'] != 'N/A':
                 col1, col2 = st.columns(2)
                 
@@ -52,7 +78,7 @@ class UIComponents:
                     st.markdown("### 💡 Conseil")
                     st.markdown(f"*{prediction_data['advice']}*")
                 
-                # Graphique des pourcentages
+                # Graphique des pourcentages seulement dans la vue détaillée
                 if prediction_data['percent_home'] != '0%':
                     UIComponents.display_probability_chart(
                         fixture_data['home_team'],
@@ -61,8 +87,6 @@ class UIComponents:
                     )
             else:
                 st.warning("⚠️ Prédictions non disponibles pour ce match")
-            
-            st.divider()
     
     @staticmethod
     def display_probability_chart(home_team, away_team, prediction_data):
