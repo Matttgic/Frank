@@ -60,43 +60,30 @@ POPULAR_LEAGUES = {
     '🇩🇪 2. Bundesliga': 79,
     '🇫🇷 Ligue 2': 62,
     
-    # === EUROPEAN COMPETITIONS ===
+    # === EUROPEAN COMPETITIONS & QUALIFIERS ===
     '🏆 Champions League': 2,
     '🥈 Europa League': 3,
     '🥉 Conference League': 848,
     '🏆 Champions League Qualification': 531,
     '🥈 Europa League Qualification': 679,
     
-    # === SOUTH AMERICA ===
+    # === SOUTH AMERICA (MAIN LEAGUES) ===
     '🇧🇷 Brasileirão Serie A': 71,
     '🇦🇷 Liga Profesional': 128,
     '🇺🇾 Primera División': 218,
     '🇨🇱 Primera División': 265,
     '🇨🇴 Liga BetPlay': 239,
-    '🇵🇪 Liga 1': 281,
-    '🇪🇨 Serie A': 242,
-    '🏆 Copa Libertadores': 13,
-    '🥈 Copa Sudamericana': 11,
     
     # === NORTH & CENTRAL AMERICA ===
     '🇺🇸 MLS': 253,
     '🇲🇽 Liga MX': 262,
-    '🇨🇦 Canadian Premier League': 285,
     
     # === ASIA ===
     '🇯🇵 J1 League': 98,
     '🇰🇷 K League 1': 292,
     '🇨🇳 Chinese Super League': 169,
     '🇸🇦 Saudi Pro League': 307,
-    '🇦🇪 UAE Pro League': 301,
-    '🇶🇦 Stars League': 274,
-    '🇮🇷 Persian Gulf Pro League': 290,
     
     # === OCEANIA ===
     '🇦🇺 A-League': 188,
-    
-    # === AFRICA (BONUS) ===
-    '🇿🇦 Premier Soccer League': 244,
-    '🇪🇬 Premier League': 233,
-    '🏆 CAF Champions League': 12,
 }
