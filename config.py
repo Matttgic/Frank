@@ -2,15 +2,20 @@
 import os
 from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv()
 
 # Configuration API
 API_KEY = os.getenv('RAPIDAPI_KEY')
 BASE_URL = 'https://api-football-v1.p.rapidapi.com/v3'
 
+# Validation de la clé API
+if not API_KEY:
+    print("⚠️ Warning: RAPIDAPI_KEY not found in environment variables")
+
 # Headers pour les requêtes
 HEADERS = {
-    'x-rapidapi-key': API_KEY,
+    'x-rapidapi-key': API_KEY or '',
     'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
 }
 
