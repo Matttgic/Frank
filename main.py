@@ -271,7 +271,7 @@ def display_league_matches(api, league_id, league_name, max_matches):
             UIComponents.display_match_card(fixture, None)
 
 def display_live_matches(api):
-    """Affiche les matchs en direct"""
+    """Affiche les matchs en direct en format compact"""
     st.header("🔴 Matchs en Direct")
     
     with st.spinner("Récupération des matchs live..."):
@@ -283,12 +283,9 @@ def display_live_matches(api):
     
     st.success(f"🔴 {len(fixtures)} matchs en direct")
     
-    # Auto-refresh pour les matchs live
-    placeholder = st.empty()
-    
+    # Pour les matchs live, pas besoin de prédictions, juste l'info en temps réel
     for fixture in fixtures:
-        with st.expander(f"🔴 {fixture['teams']['home']['name']} vs {fixture['teams']['away']['name']}", expanded=True):
-            UIComponents.display_match_card(fixture, None)  # Pas de prédictions pour économiser les requêtes
+        UIComponents.display_match_card(fixture, None)
 
 if __name__ == "__main__":
     main()
