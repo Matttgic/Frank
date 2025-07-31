@@ -55,11 +55,35 @@ class FootballAPI:
         data = self._make_request(endpoint)
         return data.get('response', []) if data else []
     
-    def get_fixtures_by_league(self, league_id, limit=10):
-        """Récupère les prochains matchs d'une ligue"""
-        endpoint = f"/fixtures?league={league_id}&next={limit}"
-        data = self._make_request(endpoint)
-        return data.get('response', []) if data else []
+    def get_fixtures_by_league(self, league_id, limit=50):
+        """Récupère TOUS les matchs d'une ligue (prochains + récents)"""
+        all_fixtures = []
+        
+        # Récupérer les prochains matchs
+        endpoint_next = f"/fixtures?league={league_id}&next={min(limit//2, 25)}"
+        data_next = self._make_request(endpoint_next)
+        if data_next:
+            all_fixtures.extend(data_next.get('response', []))
+        
+        # Récupérer les matchs récents
+        endpoint_last = f"/fixtures?league={league_id}&last={min(limit//2, 25)}"
+        data_last = self._make_request(endpoint_last)
+        if data_last:
+            all_fixtures.extend(data_last.get('response', []))
+        
+        # Supprimer les doublons basés sur l'ID
+        seen_ids = set()
+        unique_fixtures = []
+        for fixture in all_fixtures:
+            fixture_id = fixture['fixture']['id']
+            if fixture_id not in seen_ids:
+                seen_ids.add(fixture_id)
+                unique_fixtures.append(fixture)
+        
+        # Trier par date (plus récents d'abord)
+        unique_fixtures.sort(key=lambda x: x['fixture']['date'], reverse=True)
+        
+        return unique_fixtures[:limit]
     
     def get_live_fixtures(self):
         """Récupère les matchs en cours"""
