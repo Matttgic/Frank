@@ -2,10 +2,18 @@
 import streamlit as st
 from datetime import datetime, date
 import time
-from api_client import FootballAPI
-from data_processor import DataProcessor
-from ui_components import UIComponents
-from config import POPULAR_LEAGUES
+import os
+
+# Import modules with error handling
+try:
+    from api_client import FootballAPI
+    from data_processor import DataProcessor
+    from ui_components import UIComponents
+    from config import POPULAR_LEAGUES
+except ImportError as e:
+    st.error(f"Import Error: {e}")
+    st.error("Please check that all required files are present and properly configured.")
+    st.stop()
 
 # Configuration de la page
 try:
