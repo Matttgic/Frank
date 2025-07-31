@@ -8,7 +8,7 @@ class UIComponents:
     
     @staticmethod
     def display_match_card(fixture, prediction):
-        """Affiche une carte de match compacte et mobile-friendly avec prédiction et conseil dans le titre"""
+        """Affiche une carte de match compacte et mobile-friendly avec prédiction et conseil séparés"""
         fixture_data = DataProcessor.process_fixture_data(fixture)
         prediction_data = DataProcessor.process_prediction_data(prediction)
         
@@ -23,23 +23,33 @@ class UIComponents:
         else:
             score_time = DataProcessor.format_match_time(fixture_data['date'])
         
-        # Prédiction et conseil directement dans le titre
-        prediction_info = ""
-        if prediction_data['winner'] != 'N/A' and prediction_data['advice'] != 'Aucun conseil disponible':
-            # Format: "🎯 Gagnant • Conseil"
-            prediction_info = f"🎯 {prediction_data['winner']} • {prediction_data['advice']}"
-        elif prediction_data['winner'] != 'N/A':
-            # Seulement le gagnant si pas de conseil
-            prediction_info = f"🎯 {prediction_data['winner']}"
+        # Prédiction et conseil séparés avec emojis différents
+        prediction_line = ""
+        advice_line = ""
+        
+        if prediction_data['winner'] != 'N/A':
+            # 🎯 pour la prédiction du gagnant
+            prediction_line = f"🎯 {prediction_data['winner']}"
+            
+            # 💡 pour les conseils/tips
+            if prediction_data['advice'] != 'Aucun conseil disponible':
+                advice_line = f"💡 {prediction_data['advice']}"
+            else:
+                advice_line = f"💡 Analyse en cours..."
         else:
-            prediction_info = "⚠️ Pas de prédiction disponible"
+            prediction_line = "⚠️ Pas de prédiction disponible"
+            advice_line = ""
         
-        # Titre compact pour l'expander avec toutes les infos essentielles
+        # Titre compact pour l'expander avec info séparée
         match_title = f"**{status_emoji} {home_team} vs {away_team} • {score_time}**"
-        prediction_line = f"{prediction_info}"
         
-        # Utiliser un expander fermé par défaut avec info complète
-        with st.expander(f"{match_title}\n{prediction_line}", expanded=False):
+        # Combine prediction et advice sur des lignes séparées
+        info_lines = prediction_line
+        if advice_line:
+            info_lines += f"\n{advice_line}"
+        
+        # Utiliser un expander fermé par défaut avec info complète et séparée
+        with st.expander(f"{match_title}\n{info_lines}", expanded=False):
             # Contenu détaillé quand on clique
             col1, col2, col3 = st.columns([1, 1, 1])
             
