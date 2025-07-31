@@ -47,6 +47,32 @@ def main():
     st.title("⚽ Football Prédictions & Matchs")
     st.markdown("---")
     
+    # Health check pour diagnostiquer les problèmes
+    with st.expander("🔧 Diagnostic du système", expanded=False):
+        st.write("**Status des composants:**")
+        
+        # Vérification de la clé API
+        from config import API_KEY
+        if API_KEY:
+            st.success(f"✅ Clé API configurée: {API_KEY[:10]}...{API_KEY[-5:]}")
+        else:
+            st.error("❌ Clé API manquante")
+            
+        # Test d'import des modules
+        try:
+            from config import POPULAR_LEAGUES
+            st.success(f"✅ Configuration chargée ({len(POPULAR_LEAGUES)} ligues)")
+        except Exception as e:
+            st.error(f"❌ Erreur config: {e}")
+            
+        # Test de connexion API
+        if API_KEY:
+            try:
+                api_test = FootballAPI()
+                st.success("✅ Client API initialisé")
+            except Exception as e:
+                st.error(f"❌ Erreur API client: {e}")
+    
     # Vérification de la clé API
     from config import API_KEY
     if not API_KEY or API_KEY == "your_rapidapi_key_here":
@@ -54,7 +80,8 @@ def main():
         st.markdown("""
         Pour utiliser cette application, vous devez:
         1. Obtenir une clé API RapidAPI pour l'API Football
-        2. Configurer la variable d'environnement RAPIDAPI_KEY
+        2. Dans Streamlit Cloud: Configurer dans App settings > Secrets
+        3. En local: Créer un fichier .env avec RAPIDAPI_KEY=votre_clé
         """)
         st.stop()
     
